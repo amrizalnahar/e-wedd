@@ -1,26 +1,416 @@
 @import "tailwindcss";
 
+/* ──────────────────────────────────────
+   Wedding Design System — Romantic Luxury
+   ────────────────────────────────────── */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Core Palette */
+  --cream: #fdf6ec;
+  --ivory: #fffef9;
+  --gold: #c9a84c;
+  --gold-light: #e8d5a3;
+  --gold-dark: #a8872e;
+  --sage: #a8b5a0;
+  --sage-light: #d4ddd0;
+  --dusty-rose: #d4a5a5;
+  --dusty-rose-light: #e8cece;
+  --deep-brown: #4a3728;
+  --warm-gray: #8b7e74;
+  --warm-gray-light: #b8aea5;
+
+  /* Semantic */
+  --background: var(--cream);
+  --foreground: var(--deep-brown);
+  --surface: var(--ivory);
+  --accent: var(--gold);
+  --accent-light: var(--gold-light);
+  --muted: var(--warm-gray);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(74, 55, 40, 0.08);
+  --shadow-md: 0 4px 12px rgba(74, 55, 40, 0.1);
+  --shadow-lg: 0 8px 30px rgba(74, 55, 40, 0.12);
+  --shadow-gold: 0 4px 20px rgba(201, 168, 76, 0.2);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-muted: var(--muted);
+  --color-cream: var(--cream);
+  --color-ivory: var(--ivory);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-dark: var(--gold-dark);
+  --color-sage: var(--sage);
+  --color-sage-light: var(--sage-light);
+  --color-dusty-rose: var(--dusty-rose);
+  --color-dusty-rose-light: var(--dusty-rose-light);
+  --color-deep-brown: var(--deep-brown);
+  --color-warm-gray: var(--warm-gray);
+  --color-warm-gray-light: var(--warm-gray-light);
+
+  --font-display: var(--font-playfair);
+  --font-script: var(--font-great-vibes);
+  --font-arabic: var(--font-amiri);
+  --font-body: var(--font-dm-sans);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ──── Base Styles ──── */
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body, "DM Sans", sans-serif);
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display, "Playfair Display", serif);
+  color: var(--deep-brown);
+}
+
+/* ──── Ornamental Divider ──── */
+
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem 0;
+}
+
+.ornament-divider::before,
+.ornament-divider::after {
+  content: "";
+  height: 1px;
+  width: 60px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold-light),
+    transparent
+  );
+}
+
+/* ──── Gold Border Animation ──── */
+
+@keyframes borderShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.gold-border {
+  border: 1px solid var(--gold-light);
+  position: relative;
+}
+
+.gold-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--gold-light),
+    var(--gold),
+    var(--gold-light),
+    var(--gold)
+  );
+  background-size: 200% 100%;
+  animation: borderShimmer 4s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ──── Floating Petals ──── */
+
+@keyframes floatPetal {
+  0% {
+    transform: translateY(-10vh) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(110vh) translateX(100px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.petal {
+  position: fixed;
+  pointer-events: none;
+  z-index: 50;
+  will-change: transform;
+}
+
+/* ──── Scroll Progress ──── */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--dusty-rose));
+  z-index: 100;
+  transform-origin: left;
+}
+
+/* ──── Section Base ──── */
+
+.section-wedding {
+  padding: 5rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .section-wedding {
+    padding: 6rem 2rem;
+  }
+}
+
+/* ──── Card Style ──── */
+
+.card-wedding {
+  background: var(--ivory);
+  border-radius: 1.25rem;
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+}
+
+/* ──── Button Styles ──── */
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--ivory);
+  padding: 0.875rem 2.5rem;
+  border-radius: 9999px;
+  font-family: var(--font-body, "DM Sans", sans-serif);
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-gold);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gold::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.btn-gold:hover::before {
+  left: 100%;
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(201, 168, 76, 0.35);
+}
+
+/* ──── Countdown Flip Card ──── */
+
+.flip-card {
+  background: var(--ivory);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 0.75rem;
+  padding: 1rem 0.5rem;
+  min-width: 70px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.flip-card .number {
+  font-family: var(--font-display, "Playfair Display", serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.flip-card .label {
+  font-family: var(--font-body, "DM Sans", sans-serif);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--warm-gray);
+  margin-top: 0.35rem;
+}
+
+/* ──── Audio Player ──── */
+
+.audio-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  border: 2px solid var(--gold-light);
+  color: var(--ivory);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 90;
+  box-shadow: var(--shadow-gold);
+  transition: all 0.3s ease;
+}
+
+.audio-btn:hover {
+  transform: scale(1.1);
+}
+
+.audio-btn .bars {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 16px;
+}
+
+.audio-btn .bar {
+  width: 3px;
+  background: var(--ivory);
+  border-radius: 2px;
+  transition: height 0.2s ease;
+}
+
+.audio-btn.playing .bar {
+  animation: audioBar 0.8s ease-in-out infinite alternate;
+}
+
+.audio-btn.playing .bar:nth-child(1) {
+  animation-delay: 0s;
+}
+.audio-btn.playing .bar:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.audio-btn.playing .bar:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.audio-btn.playing .bar:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+@keyframes audioBar {
+  0% {
+    height: 4px;
+  }
+  100% {
+    height: 16px;
+  }
+}
+
+/* ──── Lightbox ──── */
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ──── Custom Scrollbar ──── */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gold-light);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+/* ──── Selection Color ──── */
+
+::selection {
+  background: var(--dusty-rose-light);
+  color: var(--deep-brown);
+}
+
+/* ──── RSVP form ──── */
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 0.75rem;
+  background: var(--ivory);
+  color: var(--deep-brown);
+  font-family: var(--font-body, "DM Sans", sans-serif);
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+}
+
+.form-input::placeholder {
+  color: var(--warm-gray-light);
+}
+
+/* ──── Toast Notification ──── */
+
+.toast {
+  position: fixed;
+  bottom: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--deep-brown);
+  color: var(--ivory);
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  z-index: 110;
+  box-shadow: var(--shadow-lg);
 }
